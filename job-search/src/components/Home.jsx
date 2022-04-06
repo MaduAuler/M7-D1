@@ -1,8 +1,24 @@
 import {useState, useEffect} from 'react'
 import {Link} from 'react-router-dom'
 import {Container, Col, Row, Card} from 'react-bootstrap'
+import { MdFavoriteBorder } from "react-icons/md";
+import { connect } from 'react-redux'
+import { addToFavoritesAction } from '../redux/actions';
 
-const Home = () => {
+
+
+const mapStateToProps = (state) => ({
+ 
+  })
+  
+  const mapDispatchToProps = (dispatch) => ({
+    addToFavorites: (company) => {
+      dispatch(addToFavoritesAction(company))
+    },
+  })
+  
+
+const Home = (props) => {
     const [jobs, setJobs] = useState([])
     const [inputValue, setInputValue] = useState("")
 
@@ -35,8 +51,8 @@ const Home = () => {
     
     return(
         <Container style={{backgroundColor:'#F8F8F8'}} className='mt-5 p-4'>
-         
-            <h1 className='mt-5'>Job Search</h1>
+         <Link to="/favorites"> <button>Favorites <MdFavoriteBorder/></button> </Link>
+            <h1 className='mt-5'>Job Search</h1> 
             <form onSubmit={handleSubmit}>
             <input placeholder="Search..." value = {inputValue} onChange={handleInput} className='mb-5'/>
             </form>
@@ -44,8 +60,10 @@ const Home = () => {
             <Row>
            {jobs.map((job)=>(
               <Col>
-               <Card style={{height: '200px', width: '250px'}} className='mb-5'>
-               <Card.Header>{job.category}</Card.Header>
+               <Card style={{height: '250px', width: '250px'}} className='mb-5'>
+               <Card.Header>{job.category} /<button     onClick={() => {
+                      props.addToFavorites(job)
+                    }}><MdFavoriteBorder/> Like Company</button></Card.Header>
                <Card.Body>
                  <Card.Title>{job.title}</Card.Title>
                  <Link to={`/${job.company_name}`}>{job.company_name}</Link>
@@ -59,4 +77,4 @@ const Home = () => {
     )
 }
 
-export default Home
+export default connect(mapStateToProps, mapDispatchToProps)(Home)
