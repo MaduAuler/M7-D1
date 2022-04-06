@@ -23,7 +23,7 @@ const Favorites = ({favorites}) => {
                 <Col>
            
                 <Card style={{height:'100px', weight: '100px'}} className='mb-5'>
-                   <Link to={`/${company.company_name}`}> <Card.Body>{company.company_name}</Card.Body></Link>
+                   <Link to={`/${company}`}> <Card.Body>{company}</Card.Body></Link>
                   </Card>
                     </Col>
         ))}

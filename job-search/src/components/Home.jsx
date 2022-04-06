@@ -1,10 +1,10 @@
 import {useState, useEffect} from 'react'
 import {Link} from 'react-router-dom'
-import {Container, Col, Row, Card} from 'react-bootstrap'
+import {Container, Col, Row, Card, Button} from 'react-bootstrap'
 import { MdFavoriteBorder } from "react-icons/md";
 import { connect } from 'react-redux'
 import { addToFavoritesAction } from '../redux/actions';
-
+import {home} from './home.css'
 
 
 const mapStateToProps = (state) => ({
@@ -18,9 +18,12 @@ const mapStateToProps = (state) => ({
   })
   
 
+
 const Home = (props) => {
     const [jobs, setJobs] = useState([])
     const [inputValue, setInputValue] = useState("")
+    const [selected, setSelected] = useState(false)
+   
 
     useEffect(() => {
         getJobs()
@@ -48,10 +51,12 @@ const Home = (props) => {
        event.preventDefault()
        getJobs(inputValue)
     } 
-    
+
+
+  
     return(
         <Container style={{backgroundColor:'#F8F8F8'}} className='mt-5 p-4'>
-         <Link to="/favorites"> <button>Favorites <MdFavoriteBorder/></button> </Link>
+         <Link to="/favorites"> <Button variant="secondary">Favorites <MdFavoriteBorder/></Button> </Link>
             <h1 className='mt-5'>Job Search</h1> 
             <form onSubmit={handleSubmit}>
             <input placeholder="Search..." value = {inputValue} onChange={handleInput} className='mb-5'/>
@@ -61,9 +66,8 @@ const Home = (props) => {
            {jobs.map((job)=>(
               <Col>
                <Card style={{height: '250px', width: '250px'}} className='mb-5'>
-               <Card.Header>{job.category} /<button     onClick={() => {
-                      props.addToFavorites(job)
-                    }}><MdFavoriteBorder/> Like Company</button></Card.Header>
+               <Card.Header>{job.category} <Button variant="secondary" size="lg" active
+ onClick={(e) => { props.addToFavorites(job.company_name) }}><MdFavoriteBorder/> Like Company</Button></Card.Header>
                <Card.Body>
                  <Card.Title>{job.title}</Card.Title>
                  <Link to={`/${job.company_name}`}>{job.company_name}</Link>
