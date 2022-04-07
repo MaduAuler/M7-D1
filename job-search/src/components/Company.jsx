@@ -18,7 +18,7 @@ const Company = () => {
     }
 
     return(
-        <Container style={{backgroundColor:'#F8F8F8'}} className= 'mt-5 p-5'>
+        <Container style={{backgroundColor:'#f6b3b5'}} className= 'mt-5 p-5'>
             <h1 className='mt-5 mb-5'>Company {company}</h1>
             <Row>
            {jobs.map((job) =>(

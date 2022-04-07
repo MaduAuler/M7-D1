@@ -1,13 +1,16 @@
-import {useState, useEffect} from 'react'
+import {useState} from 'react'
 import {Link} from 'react-router-dom'
 import {Container, Col, Row, Card, Button} from 'react-bootstrap'
-import { MdFavoriteBorder } from "react-icons/md";
+import {MdOutlineAddCircle } from "react-icons/md";
+import { GiHeartPlus, GiHearts } from "react-icons/gi";
 import { connect } from 'react-redux'
 import { addToFavoritesAction, getResultsAction } from '../redux/actions';
+import jobs from '../../src/jobs.jpg'
 
 
 const mapStateToProps = (state) => ({
   result: state.results.stock,
+  favorites: state.favorites.companys
   })
   
   const mapDispatchToProps = (dispatch) => ({
@@ -33,9 +36,11 @@ const Home = (props) => {
     } 
 
     return(
-        <Container style={{backgroundColor:'#F8F8F8'}} className='mt-5 p-4'>
-         <Link to="/favorites"> <Button variant="secondary">Favorites <MdFavoriteBorder/></Button> </Link>
-            <h1 className='mt-5'>Job Search</h1> 
+        <Container  className='mt-5 p-4'>
+        
+        <div className=' mb-5'> <Link to="/favorites"> <Button style={{backgroundColor: '#f6b3b5'}}>Favorites <GiHearts/></Button> </Link></div>
+      
+            <img src={jobs} style={{height:'30vh'}} className='mb-5'/>
             <form onSubmit={handleSubmit}>
             <input placeholder="Search..." value = {inputValue} onChange={handleInput} className='mb-5'/>
             </form>
@@ -44,8 +49,11 @@ const Home = (props) => {
            {props.result.data && props.result.data.map((job)=>(
               <Col>
                <Card style={{height: '250px', width: '250px'}} className='mb-5'>
-               <Card.Header>{job.category} <Button variant="secondary" size="lg" active
-                onClick={() => { props.addToFavorites(job.company_name) }}><MdFavoriteBorder/> Like Company</Button>
+               <Card.Header style={{backgroundColor: '#f6b3b5'}}>
+                 {job.category}
+               {props.favorites.includes(job.company_name)?  <button className='ml-2 buttonClicked'> <GiHearts style={{color:'#f6b3b5'}}/></button> : 
+               <button className='ml-2 button' onClick={() => { props.addToFavorites(job.company_name) }}><GiHeartPlus /> </button>}
+              
                 </Card.Header>
                <Card.Body>
                  <Card.Title>{job.title}</Card.Title>
