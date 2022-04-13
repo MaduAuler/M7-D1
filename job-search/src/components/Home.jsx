@@ -1,30 +1,18 @@
 import {useState} from 'react'
 import {Link} from 'react-router-dom'
 import {Container, Col, Row, Card, Button} from 'react-bootstrap'
-import {MdOutlineAddCircle } from "react-icons/md";
 import { GiHeartPlus, GiHearts } from "react-icons/gi";
-import { connect } from 'react-redux'
 import { addToFavoritesAction, getResultsAction } from '../redux/actions';
 import jobs from '../../src/jobs.jpg'
+import { useSelector, useDispatch } from 'react-redux'
 
-
-const mapStateToProps = (state) => ({
-  result: state.results.stock,
-  favorites: state.favorites.companys
-  })
   
-  const mapDispatchToProps = (dispatch) => ({
-    addToFavorites: (company) => {
-      dispatch(addToFavoritesAction(company))
-    },
-    getResults: (search) => {
-      dispatch(getResultsAction(search))
-
-    },
-  })
-  
-const Home = (props) => {
+const Home = () => {
     const [inputValue, setInputValue] = useState("")
+
+    const favorites = useSelector((state) => state.favorites.companys)
+    const result = useSelector((state) => state.results.stock)
+    const dispatch = useDispatch()
   
     const handleInput =(event) =>{
         setInputValue(event.target.value)
@@ -32,7 +20,7 @@ const Home = (props) => {
     
     const handleSubmit =(event) =>{
        event.preventDefault()
-       props.getResults(inputValue)
+       dispatch(getResultsAction(inputValue))
     } 
 
     return(
@@ -40,19 +28,19 @@ const Home = (props) => {
         
         <div className=' mb-5'> <Link to="/favorites"> <Button style={{backgroundColor: '#f6b3b5'}}>Favorites <GiHearts/></Button> </Link></div>
       
-            <img src={jobs} style={{height:'30vh'}} className='mb-5'/>
+            <img src={jobs} style={{height:'30vh'}} className='mb-5' alt='jobs'/>
             <form onSubmit={handleSubmit}>
             <input placeholder="Search..." value = {inputValue} onChange={handleInput} className='mb-5'/>
             </form>
            
             <Row>
-           {props.result.data && props.result.data.map((job)=>(
+           {result.data && result.data.map((job)=>(
               <Col>
                <Card style={{height: '250px', width: '250px'}} className='mb-5'>
                <Card.Header style={{backgroundColor: '#f6b3b5'}}>
                  {job.category}
-               {props.favorites.includes(job.company_name)?  <button className='ml-2 buttonClicked'> <GiHearts style={{color:'#f6b3b5'}}/></button> : 
-               <button className='ml-2 button' onClick={() => { props.addToFavorites(job.company_name) }}><GiHeartPlus /> </button>}
+               {favorites.includes(job.company_name)?  <button className='ml-2 buttonClicked'> <GiHearts style={{color:'#f6b3b5'}}/></button> : 
+               <button className='ml-2 button' onClick={() => { dispatch(addToFavoritesAction(job.company_name)) }}><GiHeartPlus /> </button>}
               
                 </Card.Header>
                <Card.Body>
@@ -68,4 +56,4 @@ const Home = (props) => {
     )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home)
+export default Home
